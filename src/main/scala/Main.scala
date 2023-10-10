@@ -1,18 +1,28 @@
 object Main extends App{
-  val saludar = (nombre: String) => "Hola, "+nombre
+  val productos = List(
+    Producto("Coca Cola", BigDecimal(6)),
+    Producto("Galletas", BigDecimal(5.5)),
+    Producto("Pringles", BigDecimal(12))
+  )
 
-  val sumar = (num1: Int, num2 :Int) => num1.+(num2)
+  val descuentos = List(5,10,8)
 
-  println(saludar("Nari"))
+  val total = productos.reduce((producto,acc) => Producto("TOTAL", producto.precio + acc.precio))
+  println(total)
 
-  println("Suma: "+sumar(5,7))
+  val productosCondDescuento = productos.map(producto => producto.copy(precio = producto.precio * 0.9))
+  println(productosCondDescuento)
 
-  val estudiante = new Estudiante("Rodrigo")
-  estudiante inscribir "Programacion Funcional"         // Notacion Infija
+  val productosConIVA = productosCondDescuento.map(producto => producto.copy(precio = producto.precio * 1.13))
+  println(productosConIVA)
+
+  val productosCondDescuentoInd = Range(0,productos.length).map(index => {
+    val producto = productos(index)
+    producto.copy(precio = producto.precio * (1 - descuentos(index) / 100.0))
+  })
+  println(productosCondDescuentoInd)
+
 }
 
-class Estudiante(nombre: String){
-  def inscribir(materia: String): Unit = {
-    println(s"Estudiante $nombre inscrito en materia $materia")
-  }
+case class Producto(nombre: String, precio: BigDecimal){
 }
